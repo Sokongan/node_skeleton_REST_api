@@ -1,13 +1,13 @@
+// schema/UserSchema.ts
 import 'reflect-metadata';
-import { IsNotEmpty, IsString, Length, IsOptional, IsInt, Min, Max } from 'class-validator';
-import { BaseSchema, Attribute } from '../../../application/schema/baseSchema';
+import { IsNotEmpty, IsString, Length, IsOptional } from 'class-validator';
+import { Attribute, BaseSchema } from '../../../application/schema/baseSchema';
 
 export class UserSchema extends BaseSchema {
-  attributes: Attribute[];
+  declare attributes: Attribute[];
 
   constructor() {
-    super();
-    this.attributes = [
+    super('user', [
       new Attribute({
         key: 'firstName',
         type: String,
@@ -16,7 +16,7 @@ export class UserSchema extends BaseSchema {
         validation: [
           { decorator: IsNotEmpty },
           { decorator: IsString },
-          { decorator: Length, args: [2, 50] }
+          { decorator: Length, args: [0, 50] }
         ]
       }),
       new Attribute({
@@ -27,7 +27,7 @@ export class UserSchema extends BaseSchema {
         validation: [
           { decorator: IsOptional },
           { decorator: IsString },
-          { decorator: Length, args: [2, 50] }
+          { decorator: Length, args: [0, 50] }
         ]
       }),
       new Attribute({
@@ -38,7 +38,7 @@ export class UserSchema extends BaseSchema {
         validation: [
           { decorator: IsNotEmpty },
           { decorator: IsString },
-          { decorator: Length, args: [2, 50] }
+          { decorator: Length, args: [0, 50] }
         ]
       }),
       new Attribute({
@@ -49,7 +49,7 @@ export class UserSchema extends BaseSchema {
         validation: [
           { decorator: IsNotEmpty },
           { decorator: IsString },
-          { decorator: Length, args: [2, 50] }
+          { decorator: Length, args: [0, 50] }
         ]
       }),
       new Attribute({
@@ -62,19 +62,7 @@ export class UserSchema extends BaseSchema {
           { decorator: IsString },
           { decorator: Length, args: [6, 100] }
         ]
-      }),
-      new Attribute({
-        key: 'age',
-        type: Number,
-        required: false,
-        access: ['GET', 'POST', 'PATCH'],
-        validation: [
-          { decorator: IsOptional },
-          { decorator: IsInt },
-          { decorator: Min, args: [0] },
-          { decorator: Max, args: [120] }
-        ]
       })
-    ];
+    ]);
   }
 }

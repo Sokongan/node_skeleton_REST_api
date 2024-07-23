@@ -7,7 +7,7 @@ class BaseService<T, DTO> {
     return this.repository.create(data);
   }
 
-  async getById(id: number): Promise<T | null> {
+  async getById(id: string): Promise<T | null> {
     return this.repository.getById(id);
   }
 
@@ -15,11 +15,11 @@ class BaseService<T, DTO> {
     return this.repository.getAll();
   }
 
-  async update(id: number, data: Partial<DTO>): Promise<T> {
+  async update(id: string, data: Partial<DTO>): Promise<T> {
     return this.repository.update(id, data);
   }
 
-  async delete(id: number): Promise<T> {
+  async delete(id: string): Promise<T> {
     return this.repository.delete(id);
   }
 }

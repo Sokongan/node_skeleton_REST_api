@@ -1,6 +1,10 @@
 import { Request, Response } from 'express';
-import { userDTO } from '../DTO/userDTO'; 
 import { UserService } from '../User/src/service/userService';
+import { UserDTO } from '../DTO/userDTO';
+import { UserSchema } from '../User/src/schema/userSchema';
+import { UserMapper } from '../User/src/mapper/userMapper';
+
+
 
 class UserController {
     private userService: UserService;
@@ -10,7 +14,7 @@ class UserController {
     }
 
     async createUserHandler(req: Request, res: Response): Promise<void> {
-        const userData: userDTO = req.body;
+        const userData: UserDTO = req.body;
 
         try {
             const newUser = await this.userService.create(userData);
@@ -22,8 +26,8 @@ class UserController {
     }
     
     async updateUserHandler(req: Request, res: Response): Promise<void> {
-        const id = parseInt(req.params.id, 10);
-        const updateData: Partial<userDTO> = req.body;
+        const id = req.params.id;
+        const updateData: Partial<UserDTO> = req.body;
         try {
             const updatedUser = await this.userService.update(id, updateData);
             if (updatedUser) {
@@ -33,14 +37,32 @@ class UserController {
             }
         } catch (error) {
             console.error('Error updating user:', error);
-            res.status(500).json({ error: 'Failed to update user' });
+            res.status(500).json({ error: error});
         }
     }
     
     async getAllUsersHandler(req: Request, res: Response): Promise<void> {
+    
+          
         try {
+            const id = req.params;
             const users = await this.userService.getAll();
-            res.status(200).json(users);
+            const userMapper = new UserMapper();
+            const userSchema = userMapper.forward(users);
+            console.log('/n',id,'\\')
+            console.log(userSchema)
+            
+           
+            // console.log('Forward Mapped User Schema:', userSchema);
+
+            
+            // const responseData = userMapper.reverse(userSchema, 'GET');
+            // console.log('Reverse Mapped Response Data for GET:', responseData);
+
+            // const responseDataPost = userMapper.reverse(userSchema, 'POST');
+            // console.log('Reverse Mapped Response Data for POST:', responseDataPost);
+
+            // res.status(200).json(users);
         } catch (error) {
             console.error('Error fetching users:', error);
             res.status(500).json({ error: 'Failed to fetch users' });
@@ -48,7 +70,7 @@ class UserController {
     }
     
     async getUserByIdHandler(req: Request, res: Response): Promise<void> {
-        const id = parseInt(req.params.id, 10);
+        const id = req.params.id;
         try {
             const user = await this.userService.getById(id);
             if (user) {
@@ -63,7 +85,7 @@ class UserController {
     }
 
     async deleteUserHandler(req: Request, res: Response): Promise<void> {
-        const id = parseInt(req.params.id, 10);
+        const id = req.params.id;
         try {
             const deletedUser = await this.userService.delete(id);
             if (deletedUser) {

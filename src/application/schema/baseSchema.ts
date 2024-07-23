@@ -1,34 +1,27 @@
-import 'reflect-metadata';
-import { validate, ValidationError } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 
-export abstract class BaseSchema {
-    abstract attributes: Attribute[];
-    async validate(instance: any): Promise<ValidationError[]> {
-      return validate(instance);
-    }
-  }
-  
-
+// baseSchema.ts
 export class Attribute {
   key: string;
   type: any;
   required: boolean;
   access: string[];
-  validation: { decorator: any, args?: any[] }[];
+  validation: Array<{ decorator: any, args?: any[] }>;
 
-  constructor(options: AttributeOptions) {
-    this.key = options.key;
-    this.type = options.type;
-    this.required = options.required || false;
-    this.access = options.access || [];
-    this.validation = options.validation || [];
+  constructor(data: Partial<Attribute>) {
+    Object.assign(this, data);
   }
 }
 
-export interface AttributeOptions {
-  key: string;
-  type: any;
-  required?: boolean;
-  access?: string[];
-  validation?: { decorator: any, args?: any[] }[];
+export class BaseSchema {
+  @IsNotEmpty()
+  @IsString()
+  resourceType: string;
+
+  attributes: Attribute[];
+  constructor(resourceType: string, attributes: Attribute[]) {
+    this.resourceType = resourceType;
+    this.attributes = attributes;
+  }
 }
+

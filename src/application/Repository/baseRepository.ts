@@ -22,7 +22,7 @@ export class BaseRepository<T, DTO> implements DefaultInterface<T, DTO> {
     return entity as T;
   }
 
-  async getById(id: number): Promise<T | null> {
+  async getById(id: string): Promise<T | null> {
     const entity = await this.getModel().findUnique({
       where: { id }
     });
@@ -34,7 +34,7 @@ export class BaseRepository<T, DTO> implements DefaultInterface<T, DTO> {
     return entities as T[];
   }
 
-  async update(id: number, data: Partial<DTO>): Promise<T> {
+  async update(id: string, data: Partial<DTO>): Promise<T> {
     const entity = await this.getModel().update({
       where: { id },
       data: this.updateDtoToEntity(data)
@@ -42,7 +42,7 @@ export class BaseRepository<T, DTO> implements DefaultInterface<T, DTO> {
     return entity as T;
   }
 
-  async delete(id: number): Promise<T> {
+  async delete(id: string): Promise<T> {
     const entity = await this.getModel().delete({
       where: { id }
     });

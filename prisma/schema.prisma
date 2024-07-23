@@ -13,12 +13,14 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 model User {
-  id Int @id @default(autoincrement())
-  firstName String @@map('first_name')
-  middleName String? @@map('middle_name')
-  lastName String @@map('last_name')
-  username String @unique
-  password String 
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  firstName String  @db.VarChar(256) @map("first_name")
+  middleName String?  @db.VarChar(256) @map("middle_name") 
+  lastName  String  @db.VarChar(256) @map("last_name")
+  username  String @unique 
+  password  String
+  isActive  Boolean @default(true)
+
+  @@map("tbl_user")
 }
