@@ -1,23 +1,21 @@
 import { Router } from 'express';
-import userController from '../controller/userController';
-import { UserSchema } from '../User/src/schema/userSchema';
+import { UserController } from '../controller/userController';
 
 class UserRoutes {
     public router: Router;
-    private userSchema: UserSchema;
 
     constructor() {
         this.router = Router();
-        this.userSchema = new UserSchema(); 
         this.initializeRoutes();
     }
   
-    private initializeRoutes() {
-        this.router.post('/', userController.createUserHandler.bind(userController)); 
-        this.router.patch('/:id', userController.updateUserHandler.bind(userController)); 
-        this.router.get('/',userController.getAllUsersHandler.bind(userController)); 
-        this.router.get('/:id', userController.getUserByIdHandler.bind(userController));
-        this.router.delete('/:id', userController.deleteUserHandler.bind(userController));
+    private initializeRoutes() { 
+        this.router.post('/', UserController.createUser.bind(UserController)); 
+        this.router.patch('/:id', UserController.updateUser.bind(UserController)); 
+        this.router.get('/',UserController.findAllUser.bind(UserController)); 
+        this.router.get('/:id', UserController.findUserById.bind(UserController));
+        this.router.get('/username/:username', UserController.findUserByUsername.bind(UserController));
+        this.router.delete('/:id', UserController.deleteUser.bind(UserController));
     }
 }
 

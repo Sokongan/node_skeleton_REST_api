@@ -1,23 +1,25 @@
 import { PrismaClient } from '@prisma/client';
-import DefaultInterface from '../Interface/baseInterface';
 
+export interface Repository<T,DTO> {
+  create(data: DTO): Promise<T>;
+  getById(id: string): Promise<T | null>;
+  getAll(): Promise<T[]>;
+  update(id: string, data: Partial<DTO>): Promise<T>;
+  delete(id: string): Promise<T>;
+}
 
-export class BaseRepository<T, DTO> implements DefaultInterface<T, DTO> {
+export class DefaultRepository<T,DTO> implements Repository<T,DTO> {
   private prisma = new PrismaClient();
 
-  constructor(
-    private modelName: keyof PrismaClient,
-    private createDtoToEntity: (dto: DTO) => any,
-    private updateDtoToEntity: (dto: Partial<DTO>) => any
-  ) {}
+  constructor(private modelName: keyof PrismaClient) {}
 
-  private getModel() {
+  public getModel() {
     return this.prisma[this.modelName] as any;
   }
 
   async create(data: DTO): Promise<T> {
     const entity = await this.getModel().create({
-      data: this.createDtoToEntity(data)
+      data:(data)
     });
     return entity as T;
   }
@@ -37,7 +39,7 @@ export class BaseRepository<T, DTO> implements DefaultInterface<T, DTO> {
   async update(id: string, data: Partial<DTO>): Promise<T> {
     const entity = await this.getModel().update({
       where: { id },
-      data: this.updateDtoToEntity(data)
+      data:(data)
     });
     return entity as T;
   }

@@ -1,7 +1,7 @@
 // schema/UserSchema.ts
 import 'reflect-metadata';
 import { IsNotEmpty, IsString, Length, IsOptional } from 'class-validator';
-import { Attribute, BaseSchema } from '../../../application/schema/baseSchema';
+import { Attribute, BaseSchema } from '../../../application/schema/defaultHandler';
 
 export class UserSchema extends BaseSchema {
   declare attributes: Attribute[];
