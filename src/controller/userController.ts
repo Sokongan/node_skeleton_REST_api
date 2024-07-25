@@ -1,9 +1,14 @@
 import { Request, Response } from 'express';
 import { UserDTO } from '../DTO/userDTO';
-import { UserService } from '../User/src/userService';
+//import { UserService } from '../User/src/userService';
+import { ServiceFactory } from '../application/Service/serviceFactory';
+import { User } from '@prisma/client';
 
+//custom 
+// const userService = new UserService()
 
-const userService = new UserService();
+//default
+const userService = ServiceFactory.createService<User,UserDTO>('user')
 export class UserController {
   static async createUser(req: Request, res: Response): Promise<void> {
     try {
@@ -67,8 +72,6 @@ export class UserController {
 static async findUserByUsername(req: Request, res: Response): Promise<void> {
     try { 
         const username = req.params.username
-        console.log(username)
-       
         const user = await userService.findByUsername(username);
         res.status(200).json(user);
         
